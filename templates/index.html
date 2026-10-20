@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Code Reviewer & Bug Explainer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>AI Code Reviewer &amp; Bug Explainer</h1>
+        <p>Find coding mistakes, understand errors, and get solutions.</p>
+    </header>
+
+    <main>
+
+        <!-- Code Editor Section -->
+        <section class="editor">
+
+            <h2>Enter Your Python Code</h2>
+
+            <form method="POST" action="/">
+
+                <div class="code-editor">
+
+                    <!-- Line Numbers -->
+                    <div id="lineNumbers" class="line-numbers">1</div>
+
+                    <!-- Code Input -->
+                    <textarea
+                        id="code"
+                        name="code"
+                        placeholder="Write or paste your Python code here..."
+                        spellcheck="false"
+                        wrap="off"
+                        required>{{ code or '' }}</textarea>
+
+                </div>
+
+                <button type="submit">Analyze Code</button>
+
+            </form>
+
+        </section>
+
+
+        <!-- Code Analysis Report -->
+        {% if result %}
+
+        <section class="report-container">
+
+            <!-- Report Header -->
+            <div class="report-header">
+
+                <div>
+                    <h2>Code Analysis Report</h2>
+                    <p class="report-subtitle">
+                        Here are the results of your code analysis.
+                    </p>
+                </div>
+
+                <div class="total-findings">
+                    <span class="findings-number">
+                        {{ result.total_errors }}
+                    </span>
+
+                    <span class="findings-label">
+                        Total Findings
+                    </span>
+                </div>
+
+            </div>
+
+
+            <!-- Overall Status -->
+            <div class="overall-status
+                {% if result.status == 'error' %}
+                    status-error
+                {% elif result.status == 'warning' %}
+                    status-warning
+                {% else %}
+                    status-success
+                {% endif %}
+            ">
+
+                {% if result.status == 'error' %}
+
+                    <span class="status-icon">!</span>
+
+                    <div>
+                        <strong>Errors Found</strong>
+                        <p>Some problems need your attention.</p>
+                    </div>
+
+                {% elif result.status == 'warning' %}
+
+                    <span class="status-icon">!</span>
+
+                    <div>
+                        <strong>Warnings Found</strong>
+                        <p>Review these possible problems in your code.</p>
+                    </div>
+
+                {% else %}
+
+                    <span class="status-icon">&#10003;</span>
+
+                    <div>
+                        <strong>Code Analysis Successful</strong>
+                        <p>No issues were detected by the analyzer.</p>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Individual Error Cards -->
+            {% if result.errors %}
+
+            <div class="error-list">
+
+                {% for error in result.errors %}
+
+                <div class="error-card
+                    {% if error.error_name in
+                        ['SyntaxError', 'IndentationError',
+                         'ZeroDivisionError'] %}
+                        card-error
+                    {% else %}
+                        card-warning
+                    {% endif %}
+                ">
+
+                    <!-- Error Card Header -->
+                    <div class="error-card-header">
+
+                        <div class="error-title">
+
+                            <span class="error-number">
+                                #{{ loop.index }}
+                            </span>
+
+                            <h3>{{ error.error_name }}</h3>
+
+                        </div>
+
+                        <span class="line-badge">
+                            Line {{ error.line }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- Problem -->
+                    <div class="error-section problem-section">
+
+                        <h4>
+                            <span class="section-icon">&#9888;</span>
+                            Problem
+                        </h4>
+
+                        <p>{{ error.problem }}</p>
+
+                    </div>
+
+
+                    <!-- Explanation -->
+                    <div class="error-section explanation-section">
+
+                        <h4>
+                            <span class="section-icon">&#9432;</span>
+                            Explanation
+                        </h4>
+
+                        <p>{{ error.explanation }}</p>
+
+                    </div>
+
+
+                    <!-- Suggested Solution -->
+                    <div class="error-section solution-section">
+
+                        <h4>
+                            <span class="section-icon">&#10003;</span>
+                            Suggested Solution
+                        </h4>
+
+                        <p>{{ error.solution }}</p>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <!-- No Issues Found -->
+            <div class="success-card">
+
+                <div class="success-icon">&#10003;</div>
+
+                <h3>No Problems Detected!</h3>
+
+                <p>
+                    Your code passed the current analysis checks.
+                    You can continue testing your program.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- Program Execution Result -->
+        {% if execution_result %}
+
+        <section class="results">
+
+            {% if execution_result.success %}
+
+            <div class="success-message">
+
+                <h2>Program Output</h2>
+
+                <p>Your code executed successfully!</p>
+
+                <pre>{{ execution_result.output }}</pre>
+
+            </div>
+
+            {% else %}
+
+            <div class="error-card">
+
+                <h2>Runtime Error</h2>
+
+                <p>
+                    Your code passed the analyzer's checks,
+                    but an error occurred during execution.
+                </p>
+
+                <h3>Error Details</h3>
+
+                <pre>{{ execution_result.error }}</pre>
+
+                <p>
+                    <strong>Suggestion:</strong>
+                    Check the error message and the line
+                    mentioned in the traceback.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        {% endif %}
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            AI Code Reviewer &amp; Bug Explainer |
+            Student Project Prototype
+        </p>
+
+    </footer>
+
+
+    <!-- Line Number JavaScript -->
+    <script>
+
+        const codeEditor = document.getElementById("code");
+        const lineNumbers = document.getElementById("lineNumbers");
+
+
+        // Update line numbers when the user types
+        function updateLineNumbers() {
+
+            const lineCount = codeEditor.value.split("\n").length;
+
+            let numbers = "";
+
+            for (let i = 1; i <= lineCount; i++) {
+                numbers += i + "\n";
+            }
+
+            lineNumbers.textContent = numbers;
+
+            syncLineNumbers();
+        }
+
+
+        // Keep line numbers aligned when scrolling
+        function syncLineNumbers() {
+
+            lineNumbers.scrollTop = codeEditor.scrollTop;
+
+        }
+
+
+        // Update line numbers while typing or pasting
+        codeEditor.addEventListener("input", updateLineNumbers);
+
+
+        // Synchronize scrolling
+        codeEditor.addEventListener("scroll", syncLineNumbers);
+
+
+        // Display correct line numbers when the page loads
+        updateLineNumbers();
+
+    </script>
+
+</body>
+
+</html>
+ 

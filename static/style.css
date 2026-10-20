@@ -1,0 +1,489 @@
+/* ---------- General Page Design ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f7fb;
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+/* ---------- Header ---------- */
+
+header {
+    background: linear-gradient(135deg, #172554, #2563eb);
+    color: white;
+    padding: 30px 40px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+header p {
+    margin: 8px 0 0;
+    color: #dbeafe;
+    font-size: 16px;
+}
+
+/* ---------- Main Content ---------- */
+
+main {
+    width: 94%;
+    max-width: 1250px;
+    margin: 30px auto;
+}
+
+/* ---------- Editor Section ---------- */
+
+.editor {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
+    margin-bottom: 30px;
+}
+
+.editor h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 23px;
+    color: #172554;
+}
+
+/* ---------- Code Editor ---------- */
+
+.code-editor {
+    display: flex;
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 12px;
+}
+
+.line-numbers {
+    flex: 0 0 55px;
+    padding: 18px 12px;
+    overflow: hidden;
+    background: #1e293b;
+    color: #94a3b8;
+    text-align: right;
+    font-family: Consolas, monospace;
+    font-size: 15px;
+    line-height: 26px;
+    white-space: pre;
+    user-select: none;
+}
+
+#code {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    border: none;
+    outline: none;
+    padding: 18px;
+    background: #111827;
+    color: #e2e8f0;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 15px;
+    line-height: 26px;
+    white-space: pre;
+    overflow: auto;
+    tab-size: 4;
+}
+
+#code::placeholder {
+    color: #64748b;
+}
+
+/* ---------- Analyze Button ---------- */
+
+button[type="submit"] {
+    margin-top: 18px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 9px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+button[type="submit"]:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+button[type="submit"]:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}
+
+/* ---------- Report Container ---------- */
+
+.report-container {
+    background: white;
+    padding: 28px;
+    margin: 30px 0;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.report-header h2 {
+    margin: 0;
+    color: #172554;
+    font-size: 27px;
+}
+
+.report-subtitle {
+    margin: 5px 0 0;
+    color: #64748b;
+}
+
+.total-findings {
+    min-width: 130px;
+    padding: 15px 20px;
+    text-align: center;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+}
+
+.findings-number {
+    display: block;
+    color: #1d4ed8;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.findings-label {
+    color: #475569;
+    font-size: 13px;
+}
+
+/* ---------- Overall Status ---------- */
+
+.overall-status {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    border: 1px solid;
+}
+
+.overall-status strong {
+    display: block;
+    font-size: 17px;
+}
+
+.overall-status p {
+    margin: 3px 0 0;
+    font-size: 14px;
+}
+
+.status-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.status-error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.status-error .status-icon {
+    background: #fee2e2;
+}
+
+.status-warning {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+.status-warning .status-icon {
+    background: #fef3c7;
+}
+
+.status-success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.status-success .status-icon {
+    background: #dcfce7;
+}
+
+/* ---------- Individual Error Cards ---------- */
+
+.error-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.error-card {
+    padding: 22px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #f59e0b;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+.error-card.card-error {
+    border-left-color: #dc2626;
+}
+
+.error-card.card-warning {
+    border-left-color: #f59e0b;
+}
+
+.error-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 15px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.error-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.error-title h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 20px;
+}
+
+.error-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #e2e8f0;
+    color: #334155;
+    font-weight: 700;
+}
+
+.line-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ---------- Problem, Explanation, Solution ---------- */
+
+.error-section {
+    padding: 14px 16px;
+    margin-top: 12px;
+    border-radius: 9px;
+}
+
+.error-section h4 {
+    margin: 0 0 7px;
+    font-size: 15px;
+}
+
+.error-section p {
+    margin: 0;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+}
+
+.problem-section {
+    background: #fff1f2;
+    color: #9f1239;
+}
+
+.explanation-section {
+    background: #eff6ff;
+    color: #1e40af;
+}
+
+.solution-section {
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.section-icon {
+    margin-right: 5px;
+}
+
+/* ---------- Success Card ---------- */
+
+.success-card {
+    padding: 30px;
+    text-align: center;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    color: #166534;
+}
+
+.success-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 55px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background: #dcfce7;
+    font-size: 30px;
+}
+
+.success-card h3 {
+    margin: 5px 0;
+}
+
+.success-card p {
+    margin-bottom: 0;
+}
+
+/* ---------- Program Output ---------- */
+
+.results {
+    margin: 30px 0;
+}
+
+.success-message,
+.results .error-card {
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
+}
+
+.success-message {
+    border-left: 5px solid #16a34a;
+}
+
+.success-message h2 {
+    color: #166534;
+}
+
+.results pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 8px;
+    background: #111827;
+    color: #e2e8f0;
+    font-family: Consolas, monospace;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Footer ---------- */
+
+footer {
+    margin-top: 40px;
+    padding: 20px;
+    background: #172554;
+    color: #cbd5e1;
+    text-align: center;
+    font-size: 14px;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* ---------- Mobile Responsive Design ---------- */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 25px 15px;
+    }
+
+    header h1 {
+        font-size: 25px;
+    }
+
+    main {
+        width: 94%;
+        margin: 20px auto;
+    }
+
+    .editor,
+    .report-container {
+        padding: 16px;
+    }
+
+    .code-editor {
+        height: 300px;
+    }
+
+    .line-numbers {
+        flex-basis: 40px;
+        padding-left: 5px;
+        padding-right: 8px;
+        font-size: 13px;
+    }
+
+    #code {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .report-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .total-findings {
+        width: 100%;
+    }
+
+    .error-card {
+        padding: 15px;
+    }
+
+    .error-title h3 {
+        font-size: 17px;
+    }
+}
