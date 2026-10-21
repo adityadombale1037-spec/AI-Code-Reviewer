@@ -195,10 +195,8 @@ def home():
                     advanced_report
                 )
 
-                # Execute only when no findings were reported.
-                # This is suitable only for a trusted local prototype.
-                if result["total_errors"] == 0:
-                    execution_result = execute_python_code(code)
+               # Run Python code locally to display its output.
+                execution_result = execute_python_code(code) 
 
             except Exception as error:
 
