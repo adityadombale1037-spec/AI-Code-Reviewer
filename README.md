@@ -1,47 +1,49 @@
-# AI Code Reviewer & Bug Explainer
+# 🐍 AI Code Reviewer & Bug Explainer
 
-A beginner-friendly Python web application that checks submitted Python
-code for common errors, explains possible problems in simple language,
-and suggests ways to fix them.
+An AI-powered Python web application that helps developers identify common coding errors, understand bugs in simple English, and get suggestions to improve their code.
 
-## Features
+The application combines **Python static code analysis with Gemini AI** to provide useful error reports and beginner-friendly explanations.
 
--   **Code editor:** Paste Python code into the web interface.
--   **Static code analysis:** Uses Python's Abstract Syntax Tree (AST)
-    to look for selected common coding problems.
--   **Beginner-friendly explanations:** Findings include the problem, an
-    explanation, and a suggested solution.
--   **Line references:** Shows the line number associated with a finding
-    when available.
--   **Combined report:** Combines findings from the basic and advanced
-    analyzers and removes duplicate findings.
--   **Run code:** The app can attempt to run submitted code when the
-    analyzer finds no issues.
--   **Web interface:** Built with Flask, HTML, and CSS.
+## 🚀 Features
 
-> **Important limitation:** This is an educational project. Static
-> analysis uses rules and heuristics, so it can miss bugs or report a
-> possible issue that is not actually a bug. It does not understand
-> every Python program.
+* **💻 Code Editor:** Enter or paste Python code into the web interface.
+* **🔍 Static Code Analysis:** Uses Python's Abstract Syntax Tree (AST) and custom rules to identify selected coding problems.
+* **🤖 Gemini AI Integration:** Uses Google's Gemini AI to explain code problems in simple, beginner-friendly language.
+* **🐛 Bug Detection:** Identifies selected common errors, such as syntax errors, possible name errors, type errors, and division-by-zero problems.
+* **💡 AI-Powered Explanations:** Helps users understand why a problem may occur and how to fix it.
+* **🛠️ Fix Suggestions:** Provides suggested corrections for detected problems.
+* **📍 Line References:** Displays line numbers for findings when available.
+* **📋 Combined Error Report:** Combines findings from multiple analyzers and removes duplicate results.
+* **▶️ Code Execution:** Can run submitted Python code and display its output when execution is enabled and the application's checks allow it.
+* **🎨 User-Friendly Interface:** Built with HTML and CSS, including a Times New Roman font style.
+* **🌐 Web-Based Application:** Access the tool through a browser using a Flask web server.
 
-## Technologies Used
+> **Note:** Gemini AI explanations depend on a valid API configuration and network availability. AI-generated suggestions may not always be correct.
 
--   Python
--   Flask
--   Python `ast` module for static analysis
--   HTML
--   CSS
--   Git and GitHub
+## 🧰 Technologies Used
 
-Check `requirements.txt` for the Python packages used by this project.
+| Technology        | Purpose                                 |
+| ----------------- | --------------------------------------- |
+| Python            | Main programming language               |
+| Flask             | Web application backend                 |
+| Python AST        | Static code analysis                    |
+| Google Gemini AI  | AI-powered explanations and suggestions |
+| Google Gen AI SDK | Communication with the Gemini API       |
+| HTML              | Web page structure                      |
+| CSS               | Website styling                         |
+| Git               | Version control                         |
+| GitHub            | Source code hosting                     |
 
-## Project Structure
+See `requirements.txt` for the Python packages required by the project.
 
-``` text
-AI_Code_Reviewer/
+## 📁 Project Structure
+
+```text
+AI_Code_Reviewer_my/
 ├── app.py
 ├── analyzer.py
 ├── analyzer_2.py
+├── ai_helper.py
 ├── requirements.txt
 ├── .gitignore
 ├── templates/
@@ -50,97 +52,137 @@ AI_Code_Reviewer/
     └── style.css
 ```
 
-## Run the Project Locally
+The structure above shows the main application files. Other files may exist in your local project folder.
+
+## ⚙️ Installation and Setup
 
 ### 1. Install Python
 
-Install a recent version of Python and make sure Python is available
-from your terminal.
+Install Python and make sure it is available from your terminal.
 
-### 2. Open the project folder
+### 2. Clone the repository
 
-Open this folder in VS Code, then open **Terminal → New Terminal**.
+```bash
+git clone https://github.com/adityadombale1037-spec/AI-Code-Reviewer.git
+```
 
-### 3. Create and activate a virtual environment (if you do not already have one)
+### 3. Open the project folder
+
+```bash
+cd AI-Code-Reviewer
+```
+
+Open the folder in VS Code.
+
+### 4. Create a virtual environment
 
 On Windows PowerShell:
 
-``` powershell
+```powershell
 python -m venv venv
+```
+
+Activate it:
+
+```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-If the virtual environment already exists, activate it with the second
-command only.
+If your virtual environment already exists, activate it instead of creating another one.
 
-### 4. Install dependencies
+### 5. Install dependencies
 
-``` powershell
+```powershell
 python -m pip install -r requirements.txt
 ```
 
-### 5. Start the Flask application
+### 6. Configure the Gemini API key
 
-``` powershell
+The application uses a Gemini API key to request AI-generated explanations.
+
+Create or obtain your API key through Google's official AI developer platform.
+
+Set the `GEMINI_API_KEY` environment variable in PowerShell:
+
+```powershell
+$env:GEMINI_API_KEY="YOUR_API_KEY_HERE"
+```
+
+Replace `YOUR_API_KEY_HERE` with your own API key.
+
+**Security warning:**
+
+* Never publish your real API key on GitHub.
+* Do not hardcode the key in `app.py`, `ai_helper.py`, or other source files.
+* Do not commit `.env` files containing secrets.
+* Configure environment variables separately for each deployment platform.
+
+The PowerShell command above sets the key for the current terminal session. You may need to set it again when opening a new terminal.
+
+### 7. Run the application
+
+```powershell
 python app.py
 ```
 
-Open the local address printed in the terminal. If the app uses Flask's
-default local address, it is usually:
+Open the local address displayed in your terminal. If Flask uses its default address, it is usually:
 
-``` text
+```text
 http://127.0.0.1:5000
 ```
 
-To stop the server, press **Ctrl + C** in the terminal.
+To stop the application, press `Ctrl + C` in the terminal.
 
-## How to Use It
+## 📝 How to Use
 
-1.  Open the application in your browser.
-2.  Paste Python code into the editor.
-3.  Submit the code for analysis.
-4.  Review each finding's problem, explanation, line number, and
-    suggested solution.
-5.  If the app runs the submitted code, review the output shown on the
-    page.
+1. Start the Flask application.
+2. Open the website in your browser.
+3. Enter or paste Python code into the code editor.
+4. Submit the code for analysis.
+5. Review the detected problems and their line numbers.
+6. Read the explanations and suggested fixes.
+7. If code execution is enabled and permitted, review the program output or runtime error.
 
-## Security Warning
+## 🔐 Security Considerations
 
-**Do not deploy this application publicly with unrestricted code
-execution enabled.** Running code submitted by another person can be
-dangerous. A timeout alone does not make execution safe.
+**Do not deploy this application publicly with unrestricted execution of user-submitted code.**
 
-Before public deployment, disable submitted-code execution or implement
-a properly isolated sandbox with strict CPU, memory, filesystem,
-network, and time limits. Do not run untrusted code with access to
-secrets or important files.
+Executing untrusted Python code can expose files, secrets, and system resources. A timeout alone does not make code execution safe.
 
-## Current Limitations
+Before allowing public users to submit and execute code, disable execution or implement a properly isolated sandbox with strict CPU, memory, filesystem, network, and time restrictions.
 
--   The analyzer checks selected patterns; it is not a complete Python
-    compiler or proof that code is bug-free.
--   Type and runtime-error predictions are heuristic and may not be
-    correct for every program.
--   The suggested solution is guidance; the app does not automatically
-    rewrite the entire program.
--   Code execution should be restricted to a trusted local development
-    environment until proper sandboxing is implemented.
+Also:
 
-## Future Improvements
+* Keep API keys and other secrets out of source control.
+* Configure API keys securely on the deployment platform.
+* Handle API errors, rate limits, and unavailable services.
+* Avoid exposing sensitive error messages or environment variables to users.
 
--   Add more static-analysis rules and tests.
--   Improve the explanations and suggested fixes.
--   Add automated unit tests.
--   Add a safer isolated execution environment before considering public
-    deployment.
--   Improve accessibility and mobile layout.
+## ⚠️ Limitations
 
-## Author
+* Static analysis checks selected patterns and cannot identify every possible bug.
+* Some findings may be false positives or may miss problems.
+* Gemini AI may generate inaccurate explanations or suggestions.
+* AI explanations require a working API configuration and network access.
+* Code execution must be properly restricted before public deployment.
+* Suggested fixes should be reviewed and tested before use.
+
+## 🔮 Future Improvements
+
+* Add more static-analysis rules and automated tests.
+* Improve the accuracy of bug detection and explanations.
+* Add more detailed AI-generated code suggestions.
+* Implement secure, isolated code execution.
+* Improve the user interface and mobile responsiveness.
+* Add support for additional programming languages.
+* Improve error handling and API usage management.
+
+## 👨‍💻 Author
 
 **Aditya Dombale**
 
-## License
+Computer Engineering Student
 
-No license has been added yet. Unless you add a license, others should
-not assume they have permission to reuse, modify, or distribute this
-project.
+## 📄 License
+
+No license has been added yet. Unless a license is added, others should not assume they have permission to reuse, modify, or distribute this project.
