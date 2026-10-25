@@ -164,17 +164,76 @@ def analyze_python_code(code):
                 "solution": solution
             })
 
-    # Step 5: Detect division by zero
+    # Step 5: Detect division by zero, while recognizing simple guards
+    parent_map = {
+        child: parent
+        for parent in ast.walk(tree)
+        for child in ast.iter_child_nodes(parent)
+    }
+
+    def compares_variable_with_zero(test, variable_name):
+        """Return the comparison operator when test compares var with 0."""
+        if not isinstance(test, ast.Compare) or len(test.ops) != 1 or len(test.comparators) != 1:
+            return None
+
+        left = test.left
+        right = test.comparators[0]
+
+        def is_zero(value):
+            return (
+                isinstance(value, ast.Constant)
+                and isinstance(value.value, (int, float))
+                and not isinstance(value.value, bool)
+                and value.value == 0
+            )
+
+        if isinstance(left, ast.Name) and left.id == variable_name and is_zero(right):
+            return test.ops[0]
+        if is_zero(left) and isinstance(right, ast.Name) and right.id == variable_name:
+            return test.ops[0]
+        return None
+
+    def is_inside(statements, target):
+        return any(
+            descendant is target
+            for statement in statements
+            for descendant in ast.walk(statement)
+        )
+
+    def is_protected_by_zero_check(node, variable_name):
+        """Recognize common guards such as if b == 0: ... else: a / b."""
+        current = node
+        while current in parent_map:
+            child = current
+            parent = parent_map[current]
+
+            if isinstance(parent, ast.If):
+                operator = compares_variable_with_zero(parent.test, variable_name)
+                if operator is not None:
+                    in_body = is_inside(parent.body, node)
+                    in_else = is_inside(parent.orelse, node)
+
+                    # if b == 0: ... else: a / b
+                    if isinstance(operator, ast.Eq) and in_else:
+                        return True
+                    # if b != 0: a / b
+                    if isinstance(operator, ast.NotEq) and in_body:
+                        return True
+
+            current = parent
+        return False
+
     for node in ast.walk(tree):
         if not (
             isinstance(node, ast.BinOp)
-            and isinstance(node.op, ast.Div)
+            and isinstance(node.op, (ast.Div, ast.FloorDiv, ast.Mod))
         ):
             continue
 
         denominator = node.right
         zero_found = False
         denominator_description = ast.unparse(denominator)
+        variable_name = denominator.id if isinstance(denominator, ast.Name) else None
 
         # Case A: 10 / 0
         if (
@@ -186,20 +245,13 @@ def analyze_python_code(code):
             zero_found = True
 
         # Case B: b = 0, then a / b
-        elif isinstance(denominator, ast.Name):
-            variable_name = denominator.id
-
+        elif variable_name is not None:
             if (
                 variable_name in variable_values
-                and isinstance(
-                    variable_values[variable_name],
-                    (int, float)
-                )
-                and not isinstance(
-                    variable_values[variable_name],
-                    bool
-                )
+                and isinstance(variable_values[variable_name], (int, float))
+                and not isinstance(variable_values[variable_name], bool)
                 and variable_values[variable_name] == 0
+                and not is_protected_by_zero_check(node, variable_name)
             ):
                 zero_found = True
                 denominator_description = (
@@ -219,12 +271,11 @@ def analyze_python_code(code):
                     "Python cannot divide a number by zero."
                 ),
                 "solution": (
-                         f"You are trying to divide by "
-                         f"'{ast.unparse(denominator)}', but its value is zero. "
-                         "Python cannot divide a number by zero. "
-                         "Before dividing, check whether the denominator is zero. "
-                         "If it is zero, display 'Cannot divide by zero.' "
-                         "instead of performing the calculation."
+                    f"You are trying to divide by '{ast.unparse(denominator)}', "
+                    "but its value is zero. Python cannot divide a number by zero. "
+                    "Before dividing, check whether the denominator is zero. "
+                    "If it is zero, display 'Cannot divide by zero.' "
+                    "instead of performing the calculation."
                 )
             })
 

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AI Code Reviewer & Bug Explainer</title>
+    <title>AI Code Reviewer &amp; Bug Explainer</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -61,12 +61,14 @@
 
                 <div>
                     <h2>Code Analysis Report</h2>
+
                     <p class="report-subtitle">
                         Here are the results of your code analysis.
                     </p>
                 </div>
 
                 <div class="total-findings">
+
                     <span class="findings-number">
                         {{ result.total_errors }}
                     </span>
@@ -74,6 +76,7 @@
                     <span class="findings-label">
                         Total Findings
                     </span>
+
                 </div>
 
             </div>
@@ -96,7 +99,10 @@
 
                     <div>
                         <strong>Errors Found</strong>
-                        <p>Some problems need your attention.</p>
+
+                        <p>
+                            Some problems need your attention.
+                        </p>
                     </div>
 
                 {% elif result.status == 'warning' %}
@@ -105,7 +111,10 @@
 
                     <div>
                         <strong>Warnings Found</strong>
-                        <p>Review these possible problems in your code.</p>
+
+                        <p>
+                            Review these possible problems in your code.
+                        </p>
                     </div>
 
                 {% else %}
@@ -114,7 +123,10 @@
 
                     <div>
                         <strong>Code Analysis Successful</strong>
-                        <p>No issues were detected by the analyzer.</p>
+
+                        <p>
+                            No issues were detected by the analyzer.
+                        </p>
                     </div>
 
                 {% endif %}
@@ -226,6 +238,49 @@
         {% endif %}
 
 
+        <!-- Gemini AI Explanation Section -->
+        {% if ai_result %}
+
+        <section class="ai-explanation">
+
+            <div class="ai-header">
+
+                <h2>Gemini AI Code Explanation</h2>
+
+                <p>
+                    Understand your code problems with AI-powered
+                    explanations and suggestions.
+                </p>
+
+            </div>
+
+            {% if ai_result.success %}
+
+            <div class="ai-response">
+
+                <h3>AI Explanation and Suggested Fix</h3>
+
+                <pre style="white-space: pre-wrap; overflow-wrap: anywhere;">{{ ai_result.explanation }}</pre>
+
+            </div>
+
+            {% else %}
+
+            <div class="ai-error">
+
+                <h3>AI Explanation Unavailable</h3>
+
+                <p>{{ ai_result.explanation }}</p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        {% endif %}
+
+
         <!-- Program Execution Result -->
         {% if execution_result %}
 
@@ -249,10 +304,19 @@
 
                 <h2>Runtime Error</h2>
 
-                <p>
-                    Your code passed the analyzer's checks,
-                    but an error occurred during execution.
-                </p>
+                {% if result and result.total_errors > 0 %}
+    <p>
+        The analyzer detected potential problems, and your
+        program encountered an error during execution.
+        Please review the findings and error details below.
+    </p>
+{% else %}
+    <p>
+        The analyzer did not detect any problems, but your
+        program encountered an error during execution.
+        Please review the error details below.
+    </p>
+{% endif %}
 
                 <h3>Error Details</h3>
 
@@ -274,7 +338,6 @@
 
     </main>
 
- 
 
     <!-- Line Number JavaScript -->
     <script>
@@ -324,4 +387,3 @@
 </body>
 
 </html>
- 

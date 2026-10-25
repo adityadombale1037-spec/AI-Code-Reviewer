@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from analyzer import analyze_python_code
 from analyzer_2 import analyze_python_code_advanced
+from ai_helper import get_ai_explanation
 
 import os
 import sys
@@ -153,6 +154,7 @@ def home():
     code = ""
     result = None
     execution_result = None
+    ai_result = None
 
     if request.method == "POST":
 
@@ -193,10 +195,13 @@ def home():
                 result = combine_reports(
                     basic_report,
                     advanced_report
+                    
                 )
 
                # Run Python code locally to display its output.
                 execution_result = execute_python_code(code) 
+                # Get AI explanation from Gemini
+                ai_result = get_ai_explanation(code, result["errors"])
 
             except Exception as error:
 
@@ -226,9 +231,9 @@ def home():
     "index.html",
     code=code,
     result=result,
-    execution_result=execution_result
+    execution_result=execution_result,
+    ai_result=ai_result
 )
-
 
 if __name__ == "__main__":
     app.run(debug=True)
